@@ -18,13 +18,13 @@ namespace LB_426_Emsar_John
         }
     }
 
-    // Blackjack-Spielklasse
-    public class Blackjack : IGame
+    // Roulette-Spielklasse
+    public class Roulette : IGame
     {
         public void Start()
         {
-            Console.WriteLine("Blackjack-Spiel wird gestartet...");
-            // Implementieren Sie hier die Blackjack-Spiellogik
+            Console.WriteLine("Roulette-Spiel wird gestartet...");
+            // Implementieren Sie hier die Roulette-Spiellogik
         }
     }
 
@@ -47,8 +47,8 @@ namespace LB_426_Emsar_John
             {
                 case "bingo":
                     return new Bingo();
-                case "blackjack":
-                    return new Blackjack();
+                case "roulette":
+                    return new Roulette();
                 case "schließen":
                     return new SpielSchließen();
                 default:
@@ -79,7 +79,7 @@ namespace LB_426_Emsar_John
         {
             Console.WriteLine("Bitte wählen Sie ein Spiel:");
             Console.WriteLine("1. Bingo");
-            Console.WriteLine("2. Blackjack");
+            Console.WriteLine("2. Roulette");
             Console.WriteLine("3. Spiel schließen");
 
             int auswahl = Convert.ToInt32(Console.ReadLine());
@@ -90,7 +90,7 @@ namespace LB_426_Emsar_John
                     StartGame("bingo");
                     break;
                 case 2:
-                    StartGame("blackjack");
+                    StartGame("roulette");
                     break;
                 case 3:
                     StartGame("schließen");
