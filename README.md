@@ -9,8 +9,8 @@
 | 2    |  Funktional     | Muss | Als Spieler möchte ich die Auswahl zwischen verschiedenen Spielen haben (Bingo und Blackjack), damit ich das Spiel meiner Wahl spielen kann.|   
 | 3    |     Rand        | Kann |Als Spieler möchte ich während eines Spiels meine aktuellen Jetons und Gewinne sehen können, um meine Strategie anzupassen und den Überblick zu behalten.|
 | 4    |  Funktional     | muss | Als Spieler möchte ich nach jedem spiel ein erneutes spiel spielen können oder das spiel verlassen können.|
-| 5    |  Funktional     | muss | Als Spieler möchte ich beim Bingo-Spiel den Einsatz und die Anzahl der Gegner wählen können, um die Spannung und die potenziellen Gewinne zu varieren.|
-| 6    |  Funktional     | Kann | Als Spieler möchte ich beim Roulette-Spiel Beträge auf verschiedene Felder setzen können, um verschiedene Gewinnchancen und Gewinnbeträge zu erhalten.|
+| 5    |  Funktional     | muss | Als Spieler möchte ich beim Bingo-Spiel und beim Roulette-Spiel den Einsatz selbst entscheiden können, um die Spannung und die potenziellen Gewinne zu varieren.|
+| 6    |  Funktional     | Kann | Als Spieler möchte ich beim Roulette-Spiel Beträge auf verschiedene Wettmöglichkeiten setzen können, um verschiedene Gewinnchancen und Gewinnbeträge zu erhalten.|
 
 ### Factory Method Pattern 
 
