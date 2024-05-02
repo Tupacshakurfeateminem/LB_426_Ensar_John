@@ -2,7 +2,7 @@
 
 namespace LB_426_Emsar_John
 {
-    // Interface für Spiele
+    // Schnittstelle für Spiele
     public interface IGame
     {
         void Start();
@@ -24,36 +24,157 @@ namespace LB_426_Emsar_John
         public void Start()
         {
             Console.WriteLine("Roulette-Spiel wird gestartet...");
-            // Implementieren Sie hier die Roulette-Spiellogik
+            PlayRoulette();
         }
-    }
 
-    // Spiel zum Schließen der Anwendung
-    public class SpielSchließen : IGame
-    {
-        public void Start()
+        private void PlayRoulette()
         {
-            Console.WriteLine("Vielen Dank für Ihren Besuch. Auf Wiedersehen!");
-            Environment.Exit(0); // Schließen der Anwendung
-        }
-    }
+            // Begrüssung und Erklärung des Spieles
+            Console.WriteLine("Willkommen beim Roulette-Spiel!");
+            Console.WriteLine("Gib dein Startkapital in CHF ein.");
+            Console.WriteLine("Danach wähle Rot (R) oder Schwarz (S) aus.");
+            Console.WriteLine("Gib 'exit' ein, um das Spiel zu beenden.");
 
-    // Factory-Klasse für Spiele
-    public class GameFactory
-    {
-        public static IGame CreateGame(string spielName)
-        {
-            switch (spielName.ToLower())
+            // Startkapital des Spielers
+            double kapital = 0;
+
+            // Kapital des Spielers eingeben
+            while (true)
             {
-                case "bingo":
-                    return new Bingo();
-                case "roulette":
-                    return new Roulette();
-                case "schließen":
-                    return new SpielSchließen();
-                default:
-                    throw new ArgumentException("Ungültiges Spiel.");
+                Console.Write("Gib dein Startkapital in CHF ein: ");
+                string kapitalInput = Console.ReadLine();
+
+                if (double.TryParse(kapitalInput, out kapital) && kapital > 0)
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Ungültige Eingabe! Bitte gib eine positive Zahl ein.");
+                }
             }
+
+            // Spielablauf
+            while (true)
+            {
+                Console.WriteLine($"Dein aktuelles Kapital: {kapital} CHF");
+
+                // Spieler wählt einen Einsatz
+                Console.Write("Setze deinen Einsatz: ");
+                string einsatzInput = Console.ReadLine();
+
+                // Überprüfe, ob das Spiel beendet werden soll
+                if (einsatzInput.ToLower() == "exit")
+                {
+                    Console.WriteLine("Das Spiel wird beendet.");
+                    break;
+                }
+
+                // Konvertiere den Einsatz zu einem Double-Wert
+                if (!double.TryParse(einsatzInput, out double einsatz) || einsatz <= 0)
+                {
+                    Console.WriteLine("Ungültige Eingabe! Bitte gib eine positive Zahl ein.");
+                    continue;
+                }
+
+                // Überprüfe, ob der Spieler genügend Kapital hat, um den Einsatz zu tätigen
+                if (einsatz > kapital)
+                {
+                    Console.WriteLine("Du hast nicht genügend Kapital für diesen Einsatz.");
+                    continue;
+                }
+
+                // Spieler wählt Rot oder Schwarz
+                Console.Write("Wähle Rot (R) oder Schwarz (S): ");
+                string bet = Console.ReadLine();
+
+                // Überprüfe, ob die Wette gültig ist
+                if (bet.ToLower() != "r" && bet.ToLower() != "s")
+                {
+                    Console.WriteLine("Ungültige Wette! Bitte wähle Rot (R) oder Schwarz (S).");
+                    continue;
+                }
+
+                // Wette auswerten und Zufallszahl generieren
+                EvaluateBet(bet, einsatz, ref kapital);
+
+                // Überprüfe, ob das Kapital aufgebraucht ist
+                if (kapital <= 0)
+                {
+                    Console.WriteLine("Dein Kapital ist aufgebraucht.");
+                    Console.Write("Möchtest du weitermachen? (ja/nein): ");
+                    string weitermachen = Console.ReadLine();
+
+                    if (weitermachen.ToLower() == "ja")
+                    {
+                        // Kapital des Spielers erneut eingeben
+                        while (true)
+                        {
+                            Console.Write("Gib dein neues Kapital in CHF ein: ");
+                            string neuesKapitalInput = Console.ReadLine();
+
+                            if (double.TryParse(neuesKapitalInput, out kapital) && kapital > 0)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Ungültige Eingabe! Bitte gib eine positive Zahl ein.");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Das Spiel wird beendet.");
+                        break;
+                    }
+                }
+            }
+
+            Console.ReadLine(); // Warten, bevor das Programm beendet wird
+        }
+
+        private void EvaluateBet(string bet, double einsatz, ref double kapital)
+        {
+            // Generiere eine Zufallszahl zwischen 0 und 36 für das Roulette-Rad
+            Random random = new Random();
+            int randomNumber = random.Next(0, 37);
+
+            // Wette auswerten und Gewinn/Verlust anzeigen
+            if (bet.ToLower() == "r")
+            {
+                if (IsRed(randomNumber))
+                {
+                    double gewinn = einsatz * 2;
+                    kapital += gewinn;
+                    Console.WriteLine($"Gewonnen! Die Zufallszahl ist {randomNumber} (Rot). Du gewinnst {gewinn} CHF.");
+                }
+                else
+                {
+                    kapital -= einsatz;
+                    Console.WriteLine($"Verloren! Die Zufallszahl ist {randomNumber} (Schwarz). Du verlierst {einsatz} CHF.");
+                }
+            }
+            else if (bet.ToLower() == "s")
+            {
+                if (!IsRed(randomNumber))
+                {
+                    double gewinn = einsatz * 2;
+                    kapital += gewinn;
+                    Console.WriteLine($"Gewonnen! Die Zufallszahl ist {randomNumber} (Schwarz). Du gewinnst {gewinn} CHF.");
+                }
+                else
+                {
+                    kapital -= einsatz;
+                    Console.WriteLine($"Verloren! Die Zufallszahl ist {randomNumber} (Rot). Du verlierst {einsatz} CHF.");
+                }
+            }
+        }
+
+        private bool IsRed(int number)
+        {
+            // Überprüfe, ob die Zahl Rot ist (1, 3, 5, ..., 35)
+            return (number >= 1 && number <= 10) || (number >= 19 && number <= 28);
         }
     }
 
@@ -80,7 +201,7 @@ namespace LB_426_Emsar_John
             Console.WriteLine("Bitte wählen Sie ein Spiel:");
             Console.WriteLine("1. Bingo");
             Console.WriteLine("2. Roulette");
-            Console.WriteLine("3. Spiel schließen");
+            Console.WriteLine("3. Spiel schliessen");
 
             int auswahl = Convert.ToInt32(Console.ReadLine());
 
@@ -93,7 +214,7 @@ namespace LB_426_Emsar_John
                     StartGame("roulette");
                     break;
                 case 3:
-                    StartGame("schließen");
+                    StartGame("schliessen");
                     break;
                 default:
                     Console.WriteLine("Ungültige Auswahl. Bitte wählen Sie erneut.");
@@ -108,7 +229,7 @@ namespace LB_426_Emsar_John
             IGame spiel = GameFactory.CreateGame(spielName);
             spiel.Start();
 
-            if (spielName != "schließen")
+            if (spielName != "schliesen") ;
             {
                 ZurückZurAuswahl();
             }
@@ -142,6 +263,35 @@ namespace LB_426_Emsar_John
             casino.GeldZuJetons(eingabeBetrag);
 
             casino.SpielAuswahl();
+        }
+    }
+
+    // Factory-Klasse für Spiele
+    public class GameFactory
+    {
+        public static IGame CreateGame(string spielName)
+        {
+            switch (spielName.ToLower())
+            {
+                case "bingo":
+                    return new Bingo();
+                case "roulette":
+                    return new Roulette();
+                case "schliessen":
+                    return new SpielSchliessen();
+                default:
+                    throw new ArgumentException("Ungültiges Spiel.");
+            }
+        }
+    }
+
+    // Spiel zum Schliessen der Anwendung
+    public class SpielSchliessen : IGame
+    {
+        public void Start()
+        {
+            Console.WriteLine("Vielen Dank für Ihren Besuch. Auf Wiedersehen!");
+            Environment.Exit(0); // Schliessen der Anwendung 
         }
     }
 }
