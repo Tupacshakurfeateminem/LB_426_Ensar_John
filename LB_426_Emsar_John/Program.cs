@@ -26,7 +26,7 @@ namespace LB_426_Emsar_John
 
         private void PlayBingo(double einsatz)
         {
-            int[,] playerCard = GeneratePlayerCard();
+            string[,] playerCard = GeneratePlayerCard();
 
             while (!IsGameOver(playerCard))
             {
@@ -50,21 +50,21 @@ namespace LB_426_Emsar_John
             }
         }
 
-        private int[,] GeneratePlayerCard()
+        private string[,] GeneratePlayerCard()
         {
             Random random = new Random();
-            int[,] card = new int[5, 5];
+            string[,] card = new string[5, 5];
             for (int i = 0; i < 5; i++)
             {
                 for (int j = 0; j < 5; j++)
                 {
-                    card[i, j] = random.Next(1, 76);
+                    card[i, j] = random.Next(1, 76).ToString();
                 }
             }
             return card;
         }
 
-        private bool IsGameOver(int[,] playerCard)
+        private bool IsGameOver(string[,] playerCard)
         {
             return IsBingo(playerCard);
         }
@@ -75,22 +75,22 @@ namespace LB_426_Emsar_John
             return random.Next(1, 76);
         }
 
-        private void UpdatePlayerCard(int[,] playerCard, int calledNumber)
+        private void UpdatePlayerCard(string[,] playerCard, int calledNumber)
         {
             for (int i = 0; i < 5; i++)
             {
                 for (int j = 0; j < 5; j++)
                 {
-                    if (playerCard[i, j] == calledNumber)
+                    if (playerCard[i, j] == calledNumber.ToString())
                     {
-                        playerCard[i, j] = -1;
+                        playerCard[i, j] = "x";
                         return;
                     }
                 }
             }
         }
 
-        private void DisplayGameStatus(int[,] playerCard)
+        private void DisplayGameStatus(string[,] playerCard)
         {
             Console.WriteLine("Deine Bingokarte:");
             for (int i = 0; i < 5; i++)
@@ -103,14 +103,14 @@ namespace LB_426_Emsar_John
             }
         }
 
-        private bool IsBingo(int[,] playerCard)
+        private bool IsBingo(string[,] playerCard)
         {
             for (int i = 0; i < 5; i++)
             {
                 bool bingo = true;
                 for (int j = 0; j < 5; j++)
                 {
-                    if (playerCard[i, j] != -1)
+                    if (playerCard[i, j] != "x")
                     {
                         bingo = false;
                         break;
@@ -127,7 +127,7 @@ namespace LB_426_Emsar_John
                 bool bingo = true;
                 for (int i = 0; i < 5; i++)
                 {
-                    if (playerCard[i, j] != -1)
+                    if (playerCard[i, j] != "x")
                     {
                         bingo = false;
                         break;
@@ -143,11 +143,11 @@ namespace LB_426_Emsar_John
             bool diagonalBingo2 = true;
             for (int i = 0; i < 5; i++)
             {
-                if (playerCard[i, i] != -1)
+                if (playerCard[i, i] != "x")
                 {
                     diagonalBingo1 = false;
                 }
-                if (playerCard[i, 4 - i] != -1)
+                if (playerCard[i, 4 - i] != "x")
                 {
                     diagonalBingo2 = false;
                 }
