@@ -5,36 +5,172 @@ namespace LB_426_Emsar_John
     // Interface für Spiele
     public interface IGame
     {
-        void Start();
+        void Start(int einsatz); // Einsatze hinzugefügt
     }
 
     // Bingo-Spielklasse
     public class Bingo : IGame
     {
-        public void Start()
+        public void Start(int einsatz) // Einsatze hinzugefügt
         {
             Console.WriteLine("Bingo-Spiel wird gestartet...");
-            // Implementieren Sie hier die Bingo-Spiellogik
+            PlayBingo(einsatz); // Einsatze hinzugefügt
+        }
+
+        private void PlayBingo(int einsatz) // Einsatze hinzugefügt
+        {
+            int[,] playerCard = GeneratePlayerCard();
+
+            while (!IsGameOver(playerCard))
+            {
+                int calledNumber = CallNumber();
+                UpdatePlayerCard(playerCard, calledNumber);
+                DisplayGameStatus(playerCard);
+
+                if (IsBingo(playerCard))
+                {
+                    Console.WriteLine("Bingo! Du hast gewonnen!");
+                    Console.WriteLine($"Du erhältst {einsatz * 2} Euro!"); // Gewinn entsprechend dem Einsatz
+                    break;
+                }
+
+                Console.WriteLine("Nächste Runde (zum Beenden 'beenden' eingeben)...");
+                if (Console.ReadLine().ToLower() == "beenden")
+                {
+                    Console.WriteLine("Spiel abgebrochen.");
+                    break;
+                }
+            }
+        }
+
+        private int[,] GeneratePlayerCard()
+        {
+            Random random = new Random();
+            int[,] card = new int[5, 5];
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    card[i, j] = random.Next(1, 76);
+                }
+            }
+            return card;
+        }
+
+        private bool IsGameOver(int[,] playerCard)
+        {
+            return IsBingo(playerCard);
+        }
+
+        private int CallNumber()
+        {
+            Random random = new Random();
+            return random.Next(1, 76);
+        }
+
+        private void UpdatePlayerCard(int[,] playerCard, int calledNumber)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    if (playerCard[i, j] == calledNumber)
+                    {
+                        playerCard[i, j] = -1;
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void DisplayGameStatus(int[,] playerCard)
+        {
+            Console.WriteLine("Deine Bingokarte:");
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    Console.Write("{0,4}", playerCard[i, j]);
+                }
+                Console.WriteLine();
+            }
+        }
+
+        private bool IsBingo(int[,] playerCard)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                bool bingo = true;
+                for (int j = 0; j < 5; j++)
+                {
+                    if (playerCard[i, j] != -1)
+                    {
+                        bingo = false;
+                        break;
+                    }
+                }
+                if (bingo)
+                {
+                    return true;
+                }
+            }
+
+            for (int j = 0; j < 5; j++)
+            {
+                bool bingo = true;
+                for (int i = 0; i < 5; i++)
+                {
+                    if (playerCard[i, j] != -1)
+                    {
+                        bingo = false;
+                        break;
+                    }
+                }
+                if (bingo)
+                {
+                    return true;
+                }
+            }
+
+            bool diagonalBingo1 = true;
+            bool diagonalBingo2 = true;
+            for (int i = 0; i < 5; i++)
+            {
+                if (playerCard[i, i] != -1)
+                {
+                    diagonalBingo1 = false;
+                }
+                if (playerCard[i, 4 - i] != -1)
+                {
+                    diagonalBingo2 = false;
+                }
+            }
+            if (diagonalBingo1 || diagonalBingo2)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 
     // Roulette-Spielklasse
     public class Roulette : IGame
     {
-        public void Start()
+        public void Start(int einsatz) // Einsatze hinzugefügt
         {
             Console.WriteLine("Roulette-Spiel wird gestartet...");
             // Implementieren Sie hier die Roulette-Spiellogik
         }
     }
 
-    // Spiel zum Schließen der Anwendung
-    public class SpielSchließen : IGame
+    // Spiel zum Schliessen der Anwendung
+    public class SpielSchliessen : IGame
     {
-        public void Start()
+        public void Start(int einsatz) // Einsatze hinzugefügt
         {
             Console.WriteLine("Vielen Dank für Ihren Besuch. Auf Wiedersehen!");
-            Environment.Exit(0); // Schließen der Anwendung
+            Environment.Exit(0); // Schliessen der Anwendung
         }
     }
 
@@ -49,8 +185,8 @@ namespace LB_426_Emsar_John
                     return new Bingo();
                 case "roulette":
                     return new Roulette();
-                case "schließen":
-                    return new SpielSchließen();
+                case "schliessen":
+                    return new SpielSchliessen();
                 default:
                     throw new ArgumentException("Ungültiges Spiel.");
             }
@@ -80,20 +216,26 @@ namespace LB_426_Emsar_John
             Console.WriteLine("Bitte wählen Sie ein Spiel:");
             Console.WriteLine("1. Bingo");
             Console.WriteLine("2. Roulette");
-            Console.WriteLine("3. Spiel schließen");
+            Console.WriteLine("3. Spiel schliessen");
 
             int auswahl = Convert.ToInt32(Console.ReadLine());
 
             switch (auswahl)
             {
                 case 1:
-                    StartGame("bingo");
+                    Console.WriteLine("Bitte geben Sie Ihren Einsatz für Bingo ein:");
+                    int einsatzBingo = Convert.ToInt32(Console.ReadLine());
+                    StartGame("bingo", einsatzBingo);
                     break;
                 case 2:
-                    StartGame("roulette");
+                    Console.WriteLine("Bitte geben Sie Ihren Einsatz für Roulette ein:");
+                    int einsatzRoulette = Convert.ToInt32(Console.ReadLine());
+                    StartGame("roulette", einsatzRoulette);
                     break;
                 case 3:
-                    StartGame("schließen");
+                    Console.WriteLine("Bitte geben Sie Ihren Einsatz für das Schliessen ein:");
+                    int einsatzSchliessen = Convert.ToInt32(Console.ReadLine());
+                    StartGame("schliessen", einsatzSchliessen);
                     break;
                 default:
                     Console.WriteLine("Ungültige Auswahl. Bitte wählen Sie erneut.");
@@ -103,12 +245,12 @@ namespace LB_426_Emsar_John
         }
 
         // Methode zum Starten eines Spiels
-        private void StartGame(string spielName)
+        private void StartGame(string spielName, int einsatz) // Einsatze hinzugefügt
         {
             IGame spiel = GameFactory.CreateGame(spielName);
-            spiel.Start();
+            spiel.Start(einsatz); // Einsatze hinzugefügt
 
-            if (spielName != "schließen")
+            if (spielName != "schliessen")
             {
                 ZurückZurAuswahl();
             }
@@ -145,3 +287,4 @@ namespace LB_426_Emsar_John
         }
     }
 }
+
