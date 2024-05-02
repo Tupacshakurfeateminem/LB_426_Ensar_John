@@ -90,6 +90,21 @@ namespace LB_426_Emsar_John
                 Console.WriteLine("Vielen Dank für Ihren Besuch. Auf Wiedersehen!");
             }
         }
+        // Schnittstelle für Beobachter
+        public interface IGameObserver
+        {
+            void Update(string message);
+        }
+
+        // Beobachterklasse für Bingo
+        public class BingoObserver : IGameObserver
+        {
+            public void Update(string message)
+            {
+                Console.WriteLine("Bingo-Observer: " + message);
+            }
+        }
+
 
         // Hauptmethode
         public static void Main(string[] args)

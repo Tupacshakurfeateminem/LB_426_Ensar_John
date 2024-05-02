@@ -1,16 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
 
 namespace LB_426_Emsar_John
 {
+    // Schnittstelle für Beobachter
+    public interface IGameObserver
+    {
+        void Update(string message);
+    }
+
+    // Beobachterklasse für Bingo
+    public class BingoObserver : IGameObserver
+    {
+        public void Update(string message)
+        {
+            Console.WriteLine("Bingo-Observer: " + message);
+        }
+    }
 
     // Bingo-Spielklasse
     public class Bingo : IGame
     {
         private double einsatz;
+        private List<IGameObserver> observers = new List<IGameObserver>();
 
         public Bingo(double einsatz)
         {
@@ -19,8 +33,29 @@ namespace LB_426_Emsar_John
 
         public void Start()
         {
-            Console.WriteLine($"Bingo-Spiel wird gestartet mit einem Einsatz von {einsatz} Euro...");
+            NotifyObservers($"Bingo-Spiel wird gestartet mit einem Einsatz von {einsatz} Euro...");
             PlayBingo(einsatz);
+        }
+
+        // Beobachterregistrierungsmethode
+        public void RegisterObserver(IGameObserver observer)
+        {
+            observers.Add(observer);
+        }
+
+        // Beobachterentfernungsmethode
+        public void RemoveObserver(IGameObserver observer)
+        {
+            observers.Remove(observer);
+        }
+
+        // Benachrichtigungsmethode für Beobachter
+        private void NotifyObservers(string message)
+        {
+            foreach (var observer in observers)
+            {
+                observer.Update(message);
+            }
         }
 
         private void PlayBingo(double einsatz)
@@ -35,15 +70,15 @@ namespace LB_426_Emsar_John
 
                 if (IsBingo(playerCard))
                 {
-                    Console.WriteLine("Bingo! Du hast gewonnen!");
-                    Console.WriteLine($"Du erhältst {einsatz * 2} Euro!"); // Gewinn entsprechend dem Einsatz
+                    NotifyObservers("Bingo! Du hast gewonnen!");
+                    NotifyObservers($"Du erhältst {einsatz * 2} Euro!"); // Gewinn entsprechend dem Einsatz
                     break;
                 }
 
                 Console.WriteLine("Nächste Runde (zum Beenden 'beenden' eingeben)...");
                 if (Console.ReadLine().ToLower() == "beenden")
                 {
-                    Console.WriteLine("Spiel abgebrochen.");
+                    NotifyObservers("Spiel abgebrochen.");
                     break;
                 }
             }
