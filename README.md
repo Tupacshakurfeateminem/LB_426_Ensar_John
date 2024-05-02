@@ -6,7 +6,7 @@
 | US-№ | Verbindlichkeit | Typ  | Beschreibung                       |
 | ---- | --------------- | ---- | ---------------------------------- |
 | 1    |  Funktional     | Muss | Als Spieler möchte ich beim Start der Casino-Software meinen gewünschten Betrag in Jetons eingeben, damit ich diesen für den Einsatz in den Spielen verwenden kann.|
-| 2    |  Funktional     | Muss | Als Spieler möchte ich die Auswahl zwischen verschiedenen Spielen haben (Bingo und Blackjack), damit ich das Spiel meiner Wahl spielen kann.|   
+| 2    |  Funktional     | Muss | Als Spieler möchte ich die Auswahl zwischen verschiedenen Spielen haben (Bingo und Roullet), damit ich das Spiel meiner Wahl spielen kann.|   
 | 3    |  Funktional     | muss |  Als Spieler möchte ich beim Bingo-Spiel den Einsatz selbst entscheiden können, um die Spannung und die potenziellen Gewinne zu varieren|
 | 4    |  Funktional     | muss | Als Spieler möchte ich beim beim Roulette-Spiel den Einsatz selbst entscheiden können, um die Spannung und die potenziellen Gewinne zu varieren.|
 | 5    |  Funktional     | Kann | Als Spieler möchte ich beim Roulette-Spiel Beträge auf verschiedene Wettmöglichkeiten setzen können, um verschiedene Gewinnchancen und Gewinnbeträge zu erhalten.|
